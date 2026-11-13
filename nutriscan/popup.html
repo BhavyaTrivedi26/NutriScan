@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <title>NutriScan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo">🌿</div>
+    <div class="logo-text">
+      <h1>NutriScan</h1>
+      <p>Smart Ingredient Analysis</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+      <span class="theme-icon">☀️</span>
+    </button>
+    <div class="nav-pills">
+      <button class="nav-pill active" data-tab="scan">🔍 Scan</button>
+      <button class="nav-pill" data-tab="profile">👤 Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCAN SCREEN ══ -->
+<div class="screen active" id="screen-scan">
+
+  <!-- AUTO SCANNING -->
+  <div class="step active" id="step-auto">
+    <div class="auto-scan-wrap">
+      <div class="scan-orb">
+        <div class="orb-glow"></div>
+        <div class="orb-ring r1"></div>
+        <div class="orb-ring r2"></div>
+        <div class="orb-center">🌿</div>
+      </div>
+      <div class="auto-title">Scanning product…</div>
+      <div class="auto-sub" id="auto-sub">Reading page content</div>
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-pct" id="progress-pct">0%</div>
+      </div>
+      <div class="step-list" id="step-list"></div>
+    </div>
+  </div>
+
+  <!-- NOT A FOOD PAGE -->
+  <div class="step hidden" id="step-notfood">
+    <div class="notfood-wrap">
+      <div class="notfood-illustration">🛒</div>
+      <h2>Open a Food Product Page</h2>
+      <p>NutriScan detects ingredients automatically. Just visit any food product listing!</p>
+
+      <div class="sites-grid">
+        <div class="site-chip">🟡 Blinkit</div>
+        <div class="site-chip">🔴 Swiggy</div>
+        <div class="site-chip">🟢 BigBasket</div>
+        <div class="site-chip">🟠 Amazon</div>
+        <div class="site-chip">🔵 Flipkart</div>
+        <div class="site-chip">🟤 DMart</div>
+      </div>
+
+      <div class="divider"><span>or search directly</span></div>
+
+      <div class="search-row">
+        <div class="search-field">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="manual-name" placeholder="e.g. Amul Toned Milk…" autocomplete="off"/>
+        </div>
+        <button class="go-btn" id="btn-search-name">Go ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="step hidden" id="step-result">
+    <div class="result-bar">
+      <button class="pill-btn" id="btn-rescan">↺ Rescan</button>
+      <button class="pill-btn accent" id="btn-search-another">🔍 Search</button>
+    </div>
+    <div id="result-content"></div>
+  </div>
+
+  <!-- SEARCH OVERLAY -->
+  <div class="step hidden" id="step-search">
+    <button class="back-link" id="btn-back-search">← Back to result</button>
+    <div class="search-card">
+      <div class="search-field big">
+        <span class="search-ico">🔍</span>
+        <input type="text" id="search-input" placeholder="Product name or describe packaging…" autocomplete="off"/>
+      </div>
+      <p class="hint-text">Try: <em>Lays classic salted</em> · <em>Maggi masala noodles</em> · <em>Amul butter</em></p>
+      <button class="btn btn-primary" id="btn-do-search">⚡ Analyse Product</button>
+    </div>
+
+    <div class="divider"><span>or paste ingredient list</span></div>
+    <textarea class="textarea" id="paste-input" placeholder="Water, Sugar, Wheat Flour, Palm Oil, Salt, Sodium Benzoate…"></textarea>
+    <button class="btn btn-soft" id="btn-paste-analyse">⚗️ Analyse Ingredients</button>
+  </div>
+
+</div>
+
+<!-- ══ PROFILE SCREEN ══ -->
+<div class="screen hidden" id="screen-profile">
+
+  <div class="profile-header">
+    <h2>Your Health Profile</h2>
+    <p>Personalise your analysis results</p>
+  </div>
+
+  <div class="form-grid">
+    <div class="field-group">
+      <label>Age</label>
+      <input type="number" id="p-age" placeholder="25" min="1" max="120"/>
+    </div>
+    <div class="field-group">
+      <label>Gender</label>
+      <select id="p-gender">
+        <option value="">Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Weight (kg)</label>
+      <input type="number" id="p-weight" placeholder="70"/>
+    </div>
+    <div class="field-group">
+      <label>Height (cm)</label>
+      <input type="number" id="p-height" placeholder="170"/>
+    </div>
+  </div>
+
+  <div class="bmi-card" id="bmi-card">
+    <div class="bmi-left">
+      <div class="bmi-val" id="bmi-number">—</div>
+      <div class="bmi-lbl">Body Mass Index</div>
+    </div>
+    <div class="bmi-pill" id="bmi-badge">Enter details</div>
+  </div>
+
+  <div class="field-group" style="margin-bottom:12px">
+    <label>Activity Level</label>
+    <select id="p-activity">
+      <option value="sedentary">🪑 Sedentary</option>
+      <option value="light">🚶 Lightly active</option>
+      <option value="moderate" selected>🏃 Moderately active</option>
+      <option value="active">⚡ Very active</option>
+      <option value="athlete">🏆 Athlete</option>
+    </select>
+  </div>
+
+  <div class="field-group" style="margin-bottom:20px">
+    <label>Health Goal</label>
+    <select id="p-goal">
+      <option value="general">🌱 General wellness</option>
+      <option value="weight_loss">⬇️ Weight loss</option>
+      <option value="weight_gain">💪 Muscle / weight gain</option>
+      <option value="heart">❤️ Heart health</option>
+      <option value="diabetes">🩸 Blood sugar management</option>
+      <option value="energy">⚡ Boost energy</option>
+      <option value="digestion">🫁 Better digestion</option>
+    </select>
+  </div>
+
+  <div class="section-title">Allergens &amp; Intolerances</div>
+  <div class="chips-wrap" id="allergen-chips">
+    <div class="chip" data-a="gluten">🌾 Gluten</div>
+    <div class="chip" data-a="dairy">🥛 Dairy</div>
+    <div class="chip" data-a="nuts">🥜 Tree Nuts</div>
+    <div class="chip" data-a="peanuts">🥜 Peanuts</div>
+    <div class="chip" data-a="eggs">🥚 Eggs</div>
+    <div class="chip" data-a="soy">🫘 Soy</div>
+    <div class="chip" data-a="shellfish">🦐 Shellfish</div>
+    <div class="chip" data-a="fish">🐟 Fish</div>
+    <div class="chip" data-a="sesame">🌰 Sesame</div>
+    <div class="chip" data-a="sulfites">⚗️ Sulfites</div>
+  </div>
+
+  <div class="add-allergen-row">
+    <input type="text" id="custom-allergen" placeholder="Add custom (e.g. corn, latex)…"/>
+    <button class="add-btn" id="btn-add-allergen">+ Add</button>
+  </div>
+
+  <button class="btn btn-primary save-profile-btn" id="btn-save-profile">
+    <span class="save-icon">💾</span>
+    <span class="save-label">Save Profile</span>
+  </button>
+
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
